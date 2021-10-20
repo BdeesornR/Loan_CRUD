@@ -16,7 +16,7 @@ class CreateMainLoansTable extends Migration
         Schema::create('main_loans', function (Blueprint $table) {
             $table->id();
             $table->decimal('loan_amount', 14, 2);
-            $table->integer('loan_term');
+            $table->integer('loan_term')->unsigned();
             $table->date('start_date');
             $table->decimal('interest_rate', 5, 2);
             $table->timestamps();

@@ -24,11 +24,11 @@ class LoanController extends Controller
     public function store() {
         $loans = new Loans();
 
-        $loans->loan_amount = request('amount')->unsigned();
-        $loans->loan_term = request('term')->unsigned();
+        $loans->loan_amount = request('amount');
+        $loans->loan_term = request('term');
         $start_date = Carbon::create(request('start_date')["year"], request('start_date')["month"], 1);
         $loans->start_date = $start_date;
-        $loans->interest_rate = request('interest')->unsigned();
+        $loans->interest_rate = request('interest');
 
         $loans->save();
 
@@ -54,10 +54,10 @@ class LoanController extends Controller
         $start_date = Carbon::create(request('start_date')["year"], request('start_date')["month"], 1);
 
         Loans::where('id', $id)->update([
-            'loan_amount' => request('amount')->unsigned(),
-            'loan_term' => request('term')->unsigned(),
+            'loan_amount' => request('amount'),
+            'loan_term' => request('term'),
             'start_date' => $start_date,
-            'interest_rate' => request('interest')->unsigned(),
+            'interest_rate' => request('interest'),
         ]);
 
         return redirect("/details/$id")->with('msg', 'The Loan has been updated successfully.');
