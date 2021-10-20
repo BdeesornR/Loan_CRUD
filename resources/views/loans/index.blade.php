@@ -23,9 +23,9 @@
                     <td>{{ $loan->interest_rate }} %</td>
                     <td>{{ $loan->created_at }}</td>
                     <td>
-                        <a href=<?php echo "/details/$loan->id"; ?> class="btn">View</a>
-                        <a href=<?php echo "/edit/$loan->id"; ?> class="btn">Edit</a>
-                        <form action=<?php echo route('loan.destroy', $loan->id) ?> method="POST">
+                        <a href="/details/{{ $loan->id }}" class="btn">View</a>
+                        <a href="/edit/{{ $loan->id }}" class="btn">Edit</a>
+                        <form action="{{ route('loan.destroy', $loan->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <input type="submit" class="btn" value="DELETE">

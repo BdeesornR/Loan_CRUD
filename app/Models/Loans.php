@@ -9,9 +9,5 @@ class Loans extends Model
 {
     protected $table = 'main_loans';
 
-    // protected $casts = [
-    //     'start_date' => 'array'
-    // ];
-
     use HasFactory;
 }

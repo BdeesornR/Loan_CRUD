@@ -24,11 +24,11 @@ class LoanController extends Controller
     public function store() {
         $loans = new Loans();
 
-        $loans->loan_amount = request('amount');
-        $loans->loan_term = request('term');
-        $start_date = Carbon::create(request('start_date')["year"],request('start_date')["month"],1);
+        $loans->loan_amount = request('amount')->unsigned();
+        $loans->loan_term = request('term')->unsigned();
+        $start_date = Carbon::create(request('start_date')["year"], request('start_date')["month"], 1);
         $loans->start_date = $start_date;
-        $loans->interest_rate = request('interest');
+        $loans->interest_rate = request('interest')->unsigned();
 
         $loans->save();
 
@@ -38,9 +38,11 @@ class LoanController extends Controller
     }
 
     public function show($id) {
-        // maybe link to other table?
         $loan = Loans::findOrFail($id);
-        return view('loans.details', ['loan' => $loan]);
+
+        $repayTable = $this->repaymentHandler($loan);
+
+        return view('loans.details', ['loan' => $loan, 'repayTable' => $repayTable]);
     }
 
     public function edit($id) {
@@ -49,13 +51,13 @@ class LoanController extends Controller
     }
 
     public function modify($id) {
-        $start_date = Carbon::create(request('start_date')["year"],request('start_date')["month"],1);
+        $start_date = Carbon::create(request('start_date')["year"], request('start_date')["month"], 1);
 
         Loans::where('id', $id)->update([
-            'loan_amount' => request('amount'),
-            'loan_term' => request('term'),
+            'loan_amount' => request('amount')->unsigned(),
+            'loan_term' => request('term')->unsigned(),
             'start_date' => $start_date,
-            'interest_rate' => request('interest')
+            'interest_rate' => request('interest')->unsigned(),
         ]);
 
         return redirect("/details/$id")->with('msg', 'The Loan has been updated successfully.');
@@ -66,5 +68,32 @@ class LoanController extends Controller
         $loan->delete();
 
         return redirect('/main')->with('msg', "The Loan #{$id} been deleted successfully.");
+    }
+
+    private function repaymentHandler($loan) {
+        $balance = $loan->loan_amount;
+        $rate = ($loan->interest_rate / 100) / 12;
+        $term = $loan->loan_term;
+        $amount = ($balance * $rate) / (1 - ((1 + $rate) ** ((-12) * $term)));
+        $principal = 0;
+        $interest = 0;
+
+        $dt = Carbon::parse($loan->start_date);
+        $result = [];
+
+        for ($i = 0; $i < $term * 12; $i++) {
+            $result[$i]['id'] = $i + 1;
+            $result[$i]['date'] = $dt->addMonth()->monthName." ".$dt->year;
+            $result[$i]['amount'] = round($amount, 2);
+            $interest = $rate * $balance;
+            $result[$i]['interest'] = $interest;
+            $principal = $amount - $interest;
+            $result[$i]['principal'] = $principal;
+            $bal = $balance - $principal;
+            $balance = $bal;
+            $result[$i]['balance'] = abs(round($balance, 2));
+        }
+
+        return $result;
     }
 }

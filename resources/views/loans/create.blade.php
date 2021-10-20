@@ -6,14 +6,16 @@
         <form action="/create" method="POST">
             @csrf
             <label for="loan_amount">Loan Amount:</label>
-            <input type="text" name="amount">
+            <!-- cannot specify maximum length on number input -->
+            <input type="number" name="amount" min="0" maxlength="12" placeholder="example: 10,000,000.00" required>
             <label for="loan_term">Loan Term:</label>
-            <input type="text" name="term">
+            <!-- min and max attributes only affect the data submitted -->
+            <input type="number" name="term" min="1" placeholder="example: 10" required>
             <label for="interest_rate">Interest Rate:</label>
-            <input type="text" name="interest">
+            <input type="number" name="interest" min="0" max="100" placeholder="example: 10" required>
             <fieldset>
                 <label for="start_date">Start Date:</label>
-                <select name="start_date[month]" id="month">
+                <select name="start_date[month]" id="month" required>
                     <option selected value="01">January</option>
                     <option value="02">February</option>
                     <option value="03">March</option>
@@ -27,7 +29,7 @@
                     <option value="11">November</option>
                     <option value="12">December</option>
                 </select>
-                <select name="start_date[year]" id="year">
+                <select name="start_date[year]" id="year" required>
                     <option selected value="2020">2020</option>
                     <option value="2021">2021</option>
                     <option value="2022">2022</option>

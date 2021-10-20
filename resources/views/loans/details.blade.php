@@ -1,30 +1,5 @@
 @extends('..layout.layout')
 
-<?php
-    use Carbon\Carbon;
-
-    $GLOBALS['balance'] = $loan->loan_amount;
-    $GLOBALS['rate'] = ($loan->interest_rate/100)/12;
-    $term = $loan->loan_term;
-    $GLOBALS['amount'] = ($GLOBALS['balance']*$GLOBALS['rate'])/(1-((1+$GLOBALS['rate'])**((-12)*$term)));
-    $GLOBALS['principal'] = 0;
-    $GLOBALS['interest'] = 0;
-
-    $dt = Carbon::parse($loan->start_date);
-
-    function calPayment() {
-        $GLOBALS['interest'] = $GLOBALS['rate']*$GLOBALS['balance'];
-        $GLOBALS['principal'] = $GLOBALS['amount']-$GLOBALS['interest'];
-        return round($GLOBALS['amount'], 2);
-    }
-
-    function calBalance() {
-        $bal = $GLOBALS['balance']-$GLOBALS['principal'];
-        $GLOBALS['balance'] = $bal;
-        return abs(round($GLOBALS['balance'], 2));
-    }
-?>
-
 @section('content')
     <div class="content">
         <div class="notification">
@@ -58,12 +33,12 @@
                 </tr>
             @for ($i = 0; $i < $loan->loan_term * 12; $i++)
                 <tr>
-                    <th><?php echo $i+1; ?></th>
-                    <th><?php echo $dt->addMonth()->monthName." ".$dtYear = $dt->year; ?></th>
-                    <th><?php echo calPayment(); ?></th>
-                    <th><?php echo round($GLOBALS['principal'], 2) ?></th>
-                    <th><?php echo round($GLOBALS['interest'], 2) ?></th>
-                    <th><?php echo calBalance(); ?></th>
+                    <th>{{ $repayTable[$i]['id'] }}</th>
+                    <th>{{ $repayTable[$i]['date'] }}</th>
+                    <th>{{ $repayTable[$i]['amount'] }}</th>
+                    <th>{{ $repayTable[$i]['principal'] }}</th>
+                    <th>{{ $repayTable[$i]['interest'] }}</th>
+                    <th>{{ $repayTable[$i]['balance'] }}</th>
                 </tr>
             @endfor
             </table>
