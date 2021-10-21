@@ -84,14 +84,14 @@ class LoanController extends Controller
         for ($i = 0; $i < $term * 12; $i++) {
             $result[$i]['id'] = $i + 1;
             $result[$i]['date'] = $dt->addMonth()->monthName." ".$dt->year;
-            $result[$i]['amount'] = round($amount, 2);
+            $result[$i]['amount'] = number_format(round($amount, 2), 2);
             $interest = $rate * $balance;
-            $result[$i]['interest'] = $interest;
+            $result[$i]['interest'] = number_format(round($interest, 2), 2);
             $principal = $amount - $interest;
-            $result[$i]['principal'] = $principal;
+            $result[$i]['principal'] = number_format(round($principal, 2), 2);
             $bal = $balance - $principal;
             $balance = $bal;
-            $result[$i]['balance'] = abs(round($balance, 2));
+            $result[$i]['balance'] = number_format(abs(round($balance, 2)), 2);
         }
 
         return $result;

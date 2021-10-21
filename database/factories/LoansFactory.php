@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Loans;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LoansFactory extends Factory
@@ -22,7 +23,23 @@ class LoansFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'id' => 1,
+            'loan_amount' => 10000.00,
+            'loan_term' => 1,
+            'start_date' => Carbon::create(2020,05,24),
+            'interest_rate' => 10,
         ];
+    }
+
+    /**
+     state function
+     **/
+    public function suspended()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'interest_rate' => 50,
+            ];
+        });
     }
 }
