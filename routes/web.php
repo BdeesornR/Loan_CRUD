@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +15,12 @@ use App\Http\Controllers;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('show-welcome');
 
-Route::get('/main', 'LoanController@index');
-Route::get('/create', 'LoanController@create');
-Route::post('/create', 'LoanController@store');
-Route::get('/details/{id}', 'LoanController@show');
-Route::get('/edit/{id}', 'LoanController@edit');
-Route::post('/edit/{id}', 'LoanController@modify');
-Route::delete('/del/{id}', 'LoanController@destroy')->name('loan.destroy');
+Route::get('/main', 'LoanController@showMain')->name('show-main');
+Route::get('/create', 'LoanController@showCreate')->name('show-create');
+Route::post('/create', 'LoanController@registerNewLoan')->name('create');
+Route::get('/details/{id}', 'LoanController@showLoanDetails')->name('show-details');
+Route::get('/edit/{id}', 'LoanController@showEdit')->name('show-edit');
+Route::post('/edit/{id}', 'LoanController@updateLoan')->name('modify');
+Route::delete('/delete/{id}', 'LoanController@deleteLoan')->name('delete');

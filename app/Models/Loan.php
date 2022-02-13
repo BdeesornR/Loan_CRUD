@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Loans extends Model
+class Loan extends Model
 {
     protected $table = 'main_loans';
 

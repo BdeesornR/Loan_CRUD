@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Loans;
+use App\Models\Loan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class LoansFactory extends Factory
+class LoanFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Loans::class;
+    protected $model = Loan::class;
 
     /**
      * Define the model's default state.
@@ -23,17 +23,16 @@ class LoansFactory extends Factory
     public function definition()
     {
         return [
-            'id' => 1,
-            'loan_amount' => 10000.00,
-            'loan_term' => 1,
-            'start_date' => Carbon::create(2020,05,24),
-            'interest_rate' => 10,
+            'loan_amount' => $this->faker->numberBetween(1, 100) * 10000,
+            'loan_term' => $this->faker->numberBetween(1, 3),
+            'start_date' => $this->faker->date(config('loan.date_format.default')),
+            'interest_rate' => $this->faker->numberBetween(1, 100),
         ];
     }
 
     /**
-     state function
-     **/
+    * state function
+    **/
     public function suspended()
     {
         return $this->state(function (array $attributes) {
